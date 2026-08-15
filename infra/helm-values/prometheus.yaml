@@ -1,0 +1,60 @@
+# k3s không expose các thành phần này -> tắt để khỏi sinh target lỗi
+kubeEtcd:
+  enabled: false
+kubeControllerManager:
+  enabled: false
+kubeScheduler:
+  enabled: false
+kubeProxy:
+  enabled: false
+
+prometheusOperator:
+  resources:
+    requests: { memory: 100Mi, cpu: 50m }
+    limits: { memory: 250Mi }
+
+prometheus:
+  prometheusSpec:
+    retention: 5d
+    retentionSize: 6GB
+    scrapeInterval: 30s
+    evaluationInterval: 30s
+    # cho phép Prometheus nhận ServiceMonitor/PrometheusRule mình tự tạo
+    serviceMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelectorNilUsesHelmValues: false
+    ruleSelectorNilUsesHelmValues: false
+    resources:
+      requests: { memory: 900Mi, cpu: 200m }
+      limits: { memory: 1600Mi }
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: local-path
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 8Gi
+
+alertmanager:
+  alertmanagerSpec:
+    resources:
+      requests: { memory: 80Mi, cpu: 20m }
+      limits: { memory: 200Mi }
+
+grafana:
+  adminPassword: admin
+  persistence:
+    enabled: false
+  resources:
+    requests: { memory: 150Mi, cpu: 50m }
+    limits: { memory: 350Mi }
+
+kube-state-metrics:
+  resources:
+    requests: { memory: 100Mi, cpu: 20m }
+    limits: { memory: 250Mi }
+
+prometheus-node-exporter:
+  resources:
+    requests: { memory: 40Mi, cpu: 20m }
+    limits: { memory: 100Mi }

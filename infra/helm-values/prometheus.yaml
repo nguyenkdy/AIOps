@@ -15,7 +15,7 @@ prometheusOperator:
 
 prometheus:
   prometheusSpec:
-    retention: 5d
+    retention: 10d
     retentionSize: 6GB
     scrapeInterval: 30s
     evaluationInterval: 30s

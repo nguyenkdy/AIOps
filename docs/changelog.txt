@@ -1,2 +1,3 @@
 2026-08-17T04:36:12Z  MOC 0 THAT: VM tat 2 ngay, du lieu truoc do bo. Chu ky doi 3h -> 1h
 2026-08-17T04:46:04Z  MOC 0 THAT: chu ky 1h, mot tien trinh k6, retention 10d/6GB. Prometheus restart ~30s gian doan
+2026-08-17T08:38:31Z  GIAN DOAN: dung sau 4.04h nen sach lien tuc

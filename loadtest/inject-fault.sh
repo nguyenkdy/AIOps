@@ -18,7 +18,7 @@ LOG=~/aiops-k8s/docs/fault-log.csv
 mkdir -p ~/aiops-k8s/docs
 
 if [ ! -f "$LOG" ]; then
-  echo "start_utc,end_utc,type,target,param,duration_s" > "$LOG"
+  echo "start_utc,end_utc,type,target,param,duration_s,note" > "$LOG"
 fi
 
 # Goi endpoint chaos tu ngoai qua port-forward tam thoi
@@ -79,5 +79,5 @@ case $TYPE in
 esac
 
 END=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-echo "$START,$END,$TYPE,$TARGET,$PARAM,$DURATION" >> "$LOG"
+echo "$START,$END,$TYPE,$TARGET,$PARAM,$DURATION," >> "$LOG"
 echo "[$END] ket thuc, da ghi nhan"

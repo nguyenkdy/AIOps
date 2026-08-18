@@ -6,3 +6,4 @@ start_utc,end_utc,type,target,param,duration_s,note
 2026-08-18T07:00:34Z,2026-08-18T07:02:48Z,outage,backend,-,120,app v3 - middleware chua dem duoc loi 500
 2026-08-18T07:14:30Z,2026-08-18T07:16:42Z,outage,backend,-,120,app v4 - da dem duoc loi 500
 2026-08-18T07:59:42Z,2026-08-18T07:59:43Z,memory,backend,250,1,OOMKilled ngay lap tuc (cgroup v2 giet ca container); pod restart
+2026-08-18T08:07:00Z,2026-08-18T08:09:00Z,memory_sustained,backend,100,120,memory giu 171MiB (89% tran) suot 2 phut, pod song sot

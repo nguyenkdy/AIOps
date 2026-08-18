@@ -15,20 +15,31 @@ PARAM=$3
 DURATION=$4
 
 LOG=~/aiops-k8s/docs/fault-log.csv
+mkdir -p ~/aiops-k8s/docs
 
 if [ ! -f "$LOG" ]; then
   echo "start_utc,end_utc,type,target,param,duration_s" > "$LOG"
 fi
+
+# Goi endpoint chaos tu ngoai qua port-forward tam thoi
+set_latency() {
+  local ms=$1
+  kubectl port-forward deploy/$TARGET 18000:8000 > /dev/null 2>&1 &
+  local pf_pid=$!
+  sleep 3
+  curl -sX POST localhost:18000/chaos/latency/$ms > /dev/null
+  kill $pf_pid 2>/dev/null
+  wait $pf_pid 2>/dev/null || true
+}
 
 START=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 echo "[$START] bat dau: $TYPE tren $TARGET (param=$PARAM, duration=$DURATION)"
 
 case $TYPE in
   latency)
-    POD=$(kubectl get pod -l app=$TARGET -o jsonpath='{.items[0].metadata.name}')
-    kubectl exec $POD -- curl -sX POST localhost:8000/chaos/latency/$PARAM > /dev/null
+    set_latency $PARAM
     sleep $DURATION
-    kubectl exec $POD -- curl -sX POST localhost:8000/chaos/latency/0 > /dev/null
+    set_latency 0
     ;;
 
   cpu)

@@ -47,23 +47,31 @@ async def track_metrics(request: Request, call_next):
         return await call_next(request)
 
     start = time.perf_counter()
-    response = await call_next(request)
-    duration = time.perf_counter() - start
+    status_code = "500"
 
-    REQUEST_COUNT.labels(
-        service=SERVICE_NAME,
-        method=request.method,
-        path=path,
-        status=str(response.status_code),
-    ).inc()
+    try:
+        response = await call_next(request)
+        status_code = str(response.status_code)
+        return response
+    except Exception:
+        # Exception khong di qua duong tra ve binh thuong,
+        # nhung van phai duoc dem la mot request that bai.
+        raise
+    finally:
+        duration = time.perf_counter() - start
 
-    REQUEST_DURATION.labels(
-        service=SERVICE_NAME,
-        method=request.method,
-        path=path,
-    ).observe(duration)
+        REQUEST_COUNT.labels(
+            service=SERVICE_NAME,
+            method=request.method,
+            path=path,
+            status=status_code,
+        ).inc()
 
-    return response
+        REQUEST_DURATION.labels(
+            service=SERVICE_NAME,
+            method=request.method,
+            path=path,
+        ).observe(duration)
 
 
 @app.get("/api/data")

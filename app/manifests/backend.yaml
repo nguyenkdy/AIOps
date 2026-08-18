@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: backend:v3
+          image: backend:v4
           imagePullPolicy: IfNotPresent
           ports:
             - name: http

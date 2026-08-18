@@ -52,6 +52,13 @@ case $TYPE in
     kubectl exec $POD -- stress-ng --vm 1 --vm-bytes ${PARAM}M --timeout ${DURATION}s || true
     ;;
 
+  outage)
+    kubectl scale deploy/$TARGET --replicas=0
+    sleep $DURATION
+    kubectl scale deploy/$TARGET --replicas=1
+    kubectl rollout status deploy/$TARGET
+    ;;
+
   podkill)
     POD=$(kubectl get pod -l app=$TARGET -o jsonpath='{.items[0].metadata.name}')
     kubectl delete pod $POD --wait=false

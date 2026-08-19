@@ -79,5 +79,5 @@ case $TYPE in
 esac
 
 END=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-echo "$START,$END,$TYPE,$TARGET,$PARAM,$DURATION," >> "$LOG"
+echo "$START,$END,$TYPE,$TARGET,$PARAM,$DURATION,\"\"" >> "$LOG"
 echo "[$END] ket thuc, da ghi nhan"

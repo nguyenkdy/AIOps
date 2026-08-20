@@ -1,0 +1,33 @@
+{
+  "feature_cols": [
+    "latency_p95__backend",
+    "cpu__backend",
+    "memory__backend",
+    "error_rate__frontend"
+  ],
+  "feature_names": [
+    "latency_p95__backend",
+    "latency_p95__backend_mean15",
+    "latency_p95__backend_std15",
+    "latency_p95__backend_diff",
+    "cpu__backend",
+    "cpu__backend_mean15",
+    "cpu__backend_std15",
+    "cpu__backend_diff",
+    "memory__backend",
+    "memory__backend_mean15",
+    "memory__backend_std15",
+    "memory__backend_diff",
+    "error_rate__frontend",
+    "error_rate__frontend_mean15",
+    "error_rate__frontend_std15",
+    "error_rate__frontend_diff"
+  ],
+  "threshold": 0.5693827536063166,
+  "percentile": 99,
+  "train_block": 1,
+  "train_start": "2026-08-17 04:24:00+00:00",
+  "train_end": "2026-08-17 08:44:00+00:00",
+  "train_points": 519,
+  "sklearn_version": "1.9.0"
+}

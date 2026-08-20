@@ -8,3 +8,4 @@
 2026-08-19T05:12:30Z  Bat lai cho giai doan 4
 2026-08-19T05:54:55Z  GIAN DOAN: ket thuc giai doan 4
 2026-08-20T04:19:43Z  Bat lai cho giai doan 5
+2026-08-20T06:59:38Z  GIAN DOAN: ket thuc buoi giai doan 5 (detector + alert rule)

@@ -1,0 +1,41 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: aiops-detector
+  namespace: default
+  labels:
+    app: detector
+spec:
+  groups:
+    - name: aiops
+      rules:
+        # Canh bao chinh: diem bat thuong vuot nguong hoc tu tap train
+        - alert: AnomalyDetected
+          expr: aiops_anomaly_score > on() group_left() aiops_anomaly_threshold
+          for: 90s
+          labels:
+            severity: warning
+            component: "{{ $labels.target }}"
+          annotations:
+            summary: "Phat hien bat thuong tren {{ $labels.target }}"
+            description: "Diem bat thuong {{ printf \"%.4f\" $value }} vuot nguong. Can dieu tra nguyen nhan."
+
+        # Detector chet hoac khong scrape duoc
+        - alert: DetectorDown
+          expr: up{job="detector"} == 0
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Detector khong hoat dong"
+            description: "Khong scrape duoc detector trong 2 phut. He thong dang mu."
+
+        # Detector chay nhung suy luan that bai lien tuc
+        - alert: DetectorInferenceFailing
+          expr: rate(aiops_inference_errors_total[5m]) > 0.05
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Detector suy luan that bai"
+            description: "Ly do: {{ $labels.reason }}"

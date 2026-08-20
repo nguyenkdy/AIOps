@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: detector
+  namespace: default
+  labels:
+    app: detector
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: detector
+  template:
+    metadata:
+      labels:
+        app: detector
+    spec:
+      containers:
+        - name: detector
+          image: detector:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8000
+          env:
+            - name: PROM_URL
+              value: "http://monitoring-kube-prometheus-prometheus.monitoring.svc:9090"
+            - name: MODEL_DIR
+              value: "/app/models"
+            - name: INTERVAL_SECONDS
+              value: "30"
+          resources:
+            requests:
+              cpu: 100m
+              memory: 200Mi
+            limits:
+              cpu: 500m
+              memory: 500Mi
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            timeoutSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /metrics
+              port: 8000
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 4
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: detector
+  namespace: default
+  labels:
+    app: detector
+spec:
+  selector:
+    app: detector
+  ports:
+    - name: http
+      port: 8000
+      targetPort: 8000
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: detector
+  namespace: default
+  labels:
+    app: detector
+spec:
+  selector:
+    matchLabels:
+      app: detector
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 30s
